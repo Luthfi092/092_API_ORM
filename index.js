@@ -41,4 +41,19 @@ app.get('/komik', async (req, res) => {
     }
 });
 
+app.put('/komik/:id', async (req, res) => {
+    const { id } = req.params;
+    const { title, author } = req.body;
+
+    try {
+        const komik = await db.Komik.findByPk(id);
+        if (!komik) {
+            return res.status(404).send({ error: 'Komik not found' });
+        }
+        await komik.update({ title, author });
+        res.send(komik);
+    } catch (err) {
+        res.send({ error: err.message });
+    }
+});
 
